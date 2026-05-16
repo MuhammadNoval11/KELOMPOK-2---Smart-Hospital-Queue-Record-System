@@ -1,3 +1,58 @@
-print ("hello world")
+# Pastikan class LLNode dan class Pasien sudah ada sesuai starter code
 
-print ("test system")
+class PriorityQueue:
+    """Priority Queue berbasis Singly Linked List, terurut prioritas ASC."""
+    def __init__(self):
+        self.head: Optional[LLNode] = None
+        self._size: int = 0
+
+    def enqueue(self, pasien: Pasien) -> None:
+        """Big-O waktu: O(n) sisipkan pada posisi prioritas."""
+        new_node = LLNode(pasien)
+
+        # Kasus 1 & 2: Antrean kosong ATAU pasien baru LEBIH darurat dari head
+        # Ingat: Angka prioritas lebih kecil berarti lebih darurat (1=KRITIS)
+        if self.head is None or pasien.prioritas < self.head.data.prioritas:
+            new_node.next = self.head
+            self.head = new_node
+        else:
+            # Kasus 3: Sisipkan di tengah atau belakang
+            current = self.head
+            
+            # Traversal: Maju terus selama node berikutnya ada DAN 
+            # prioritas node berikutnya LEBIH KECIL ATAU SAMA DENGAN prioritas pasien baru.
+            # Tanda '<=' ini yang menjamin aturan FIFO untuk prioritas yang sama!
+            while current.next is not None and current.next.data.prioritas <= pasien.prioritas:
+                current = current.next
+            
+            # Sisipkan new_node di antara current dan current.next
+            new_node.next = current.next
+            current.next = new_node
+            
+        self._size += 1
+
+    def dequeue(self) -> Optional[Pasien]:
+        """Big-O waktu: O(1) selalu ambil head."""
+        if self.is_empty():
+            return None
+        
+        # Ambil data dari head saat ini
+        pasien_dipanggil = self.head.data
+        
+        # Geser head ke node berikutnya (node lama akan dihapus oleh garbage collector)
+        self.head = self.head.next
+        self._size -= 1
+        
+        return pasien_dipanggil
+
+    def peek(self) -> Optional[Pasien]:
+        """Big-O waktu: O(1)."""
+        if self.is_empty():
+            return None
+        return self.head.data
+
+    def is_empty(self) -> bool:
+        return self._size == 0
+
+    def __len__(self) -> int:
+        return self._size
