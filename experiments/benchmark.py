@@ -12,6 +12,7 @@ class Stack:
     def pop(self):
         if not self.is_empty():
             return self.items.pop()
+        return "stack kosong"
 
     def peek(self):
         return self.items[-1]
@@ -31,6 +32,7 @@ class Queue:
     def dequeue(self):
         if not self.is_empty():
             return self.items.pop(0)
+        return "queue kosong"
 
     def is_empty(self):
         return len(self.items) == 0
@@ -84,38 +86,38 @@ ukuran = [100, 1000, 10000]
 
 for n in ukuran:
     data = [random.randint(1, 10000) for _ in range(n)]
-    print(f"\nn = {n}")
-    print("-" * 35)
+    print(f"n = {n}")
 
     s = Stack()
     awal = time.time()
     for x in data:
         s.push(x)
-    print(f"stack push   : {(time.time() - awal) * 1000:.4f} ms")
+    print(f"  stack push  : {(time.time() - awal) * 1000:.4f} ms")
 
     awal = time.time()
     for _ in range(n):
         s.pop()
-    print(f"stack pop    : {(time.time() - awal) * 1000:.4f} ms")
+    print(f"  stack pop   : {(time.time() - awal) * 1000:.4f} ms")
 
     q = Queue()
     awal = time.time()
     for x in data:
         q.enqueue(x)
-    print(f"queue enqueue: {(time.time() - awal) * 1000:.4f} ms")
+    print(f"  queue enqueue: {(time.time() - awal) * 1000:.4f} ms")
 
     awal = time.time()
     for _ in range(n):
         q.dequeue()
-    print(f"queue dequeue: {(time.time() - awal) * 1000:.4f} ms")
+    print(f"  queue dequeue: {(time.time() - awal) * 1000:.4f} ms")
 
     pohon = BST()
     awal = time.time()
     for x in data:
         pohon.insert(x)
-    print(f"bst insert   : {(time.time() - awal) * 1000:.4f} ms")
+    print(f"  bst insert  : {(time.time() - awal) * 1000:.4f} ms")
 
     awal = time.time()
     for x in data:
         pohon.search(x)
-    print(f"bst search   : {(time.time() - awal) * 1000:.4f} ms")
+    print(f"  bst search  : {(time.time() - awal) * 1000:.4f} ms")
+    print()
