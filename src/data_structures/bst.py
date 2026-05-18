@@ -1,29 +1,26 @@
 class DetailPenyakit:
     def __init__(self, nama_penyakit, tingkat_keparahan, gejala, obat, catatan_dokter):
-        self.nama_penyakit      = nama_penyakit
-        self.tingkat_keparahan  = tingkat_keparahan  # RINGAN / SEDANG / KRITIS
-        self.gejala             = gejala
-        self.obat               = obat
-        self.catatan_dokter     = catatan_dokter
+        self.nama_penyakit     = nama_penyakit
+        self.tingkat_keparahan = tingkat_keparahan
+        self.gejala            = gejala
+        self.obat              = obat
+        self.catatan_dokter    = catatan_dokter
 
 
-# ── STRUKTUR NODE ─────────────────────────────────
 class Node:
     def __init__(self, no_rm, nama, umur, detail_penyakit):
         self.no_rm           = no_rm
         self.nama            = nama
         self.umur            = umur
-        self.detail_penyakit = detail_penyakit   # objek DetailPenyakit
+        self.detail_penyakit = detail_penyakit
         self.left            = None
         self.right           = None
 
 
-# ── STRUKTUR BST ──────────────────────────────────
 class BST:
     def __init__(self):
         self.root = None
 
-    # ── INSERT ────────────────────────────────────
     def insert(self, no_rm, nama, umur, detail_penyakit):
         node_baru = Node(no_rm, nama, umur, detail_penyakit)
         if self.root is None:
@@ -44,7 +41,6 @@ class BST:
             else:
                 return False
 
-    # ── SEARCH ────────────────────────────────────
     def search(self, no_rm):
         current = self.root
         while current:
@@ -56,7 +52,6 @@ class BST:
                 current = current.right
         return None
 
-    # ── DELETE ────────────────────────────────────
     def delete(self, no_rm):
         self.root, berhasil = self._delete(self.root, no_rm)
         return berhasil
@@ -90,7 +85,6 @@ class BST:
             node = node.left
         return node
 
-    # ── INORDER ───────────────────────────────────
     def inorder(self):
         hasil = []
         self._inorder(self.root, hasil)
@@ -102,7 +96,6 @@ class BST:
             hasil.append(node)
             self._inorder(node.right, hasil)
 
-    # ── TAMPIL SEMUA (ringkas) ─────────────────────
     def tampil_semua(self):
         data = self.inorder()
         if not data:
@@ -114,43 +107,3 @@ class BST:
             dp = n.detail_penyakit
             print(f"{n.no_rm:<10} {n.nama:<22} {n.umur:<6} {dp.nama_penyakit:<20} {dp.tingkat_keparahan}")
         print(f"\nTotal: {len(data)} pasien")
-
-
-# ══════════════════════════════════════════════════
-#  HELPER INPUT DETAIL PENYAKIT
-# ══════════════════════════════════════════════════
-
-def input_detail_penyakit():
-    print("\n  -- Detail Penyakit --")
-    nama_penyakit = input("Nama Penyakit      : ").strip().title()
-
-    print("Tingkat Keparahan  : ")
-    print("  1. RINGAN")
-    print("  2. SEDANG")
-    print("  3. KRITIS")
-    pilihan_keparahan = input("Pilih (1/2/3)      : ").strip()
-    keparahan_map = {"1": "RINGAN", "2": "SEDANG", "3": "KRITIS"}
-    tingkat_keparahan = keparahan_map.get(pilihan_keparahan, "RINGAN")
-
-    gejala          = input("Gejala             : ").strip().title()
-    obat            = input("Obat/Treatment     : ").strip().title()
-    catatan_dokter  = input("Catatan Dokter     : ").strip().title()
-
-    return DetailPenyakit(nama_penyakit, tingkat_keparahan, gejala, obat, catatan_dokter)
-
-
-def tampil_detail(node):
-    dp = node.detail_penyakit
-    print("\nDATA PASIEN")
-    print("-" * 40)
-    print(f"No RM              : {node.no_rm}")
-    print(f"Nama               : {node.nama}")
-    print(f"Umur               : {node.umur} tahun")
-    print("\nDETAIL PENYAKIT")
-    print("-" * 40)
-    print(f"Nama Penyakit      : {dp.nama_penyakit}")
-    print(f"Tingkat Keparahan  : {dp.tingkat_keparahan}")
-    print(f"Gejala             : {dp.gejala}")
-    print(f"Obat/Treatment     : {dp.obat}")
-    print(f"Catatan Dokter     : {dp.catatan_dokter}")
-    print("-" * 40)
