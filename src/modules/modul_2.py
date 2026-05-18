@@ -1,6 +1,3 @@
-# modul 2 - stack riwayat tindakan dokter
-# tiap dokter punya stack sendiri
-
 class Node:
     def __init__(self, tindakan):
         self.tindakan = tindakan
