@@ -1,6 +1,3 @@
-# modul 3 - bst rekam medis
-# kuncinya nomor rekam medis
-
 class Node:
     def __init__(self, no_rm, data):
         self.no_rm = no_rm
