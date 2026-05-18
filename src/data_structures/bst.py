@@ -1,109 +1,60 @@
-class DetailPenyakit:
-    def __init__(self, nama_penyakit, tingkat_keparahan, gejala, obat, catatan_dokter):
-        self.nama_penyakit     = nama_penyakit
-        self.tingkat_keparahan = tingkat_keparahan
-        self.gejala            = gejala
-        self.obat              = obat
-        self.catatan_dokter    = catatan_dokter
-
-
 class Node:
-    def __init__(self, no_rm, nama, umur, detail_penyakit):
-        self.no_rm           = no_rm
-        self.nama            = nama
-        self.umur            = umur
-        self.detail_penyakit = detail_penyakit
-        self.left            = None
-        self.right           = None
+    def __init__(self, data):
+        self.data = data
+        self.kiri = None
+        self.kanan = None
 
 
 class BST:
     def __init__(self):
         self.root = None
 
-    def insert(self, no_rm, nama, umur, detail_penyakit):
-        node_baru = Node(no_rm, nama, umur, detail_penyakit)
+    def insert(self, data):
         if self.root is None:
-            self.root = node_baru
-            return True
-        current = self.root
-        while True:
-            if no_rm < current.no_rm:
-                if current.left is None:
-                    current.left = node_baru
-                    return True
-                current = current.left
-            elif no_rm > current.no_rm:
-                if current.right is None:
-                    current.right = node_baru
-                    return True
-                current = current.right
-            else:
-                return False
-
-    def search(self, no_rm):
-        current = self.root
-        while current:
-            if no_rm == current.no_rm:
-                return current
-            elif no_rm < current.no_rm:
-                current = current.left
-            else:
-                current = current.right
-        return None
-
-    def delete(self, no_rm):
-        self.root, berhasil = self._delete(self.root, no_rm)
-        return berhasil
-
-    def _delete(self, node, no_rm):
-        if node is None:
-            return None, False
-        if no_rm < node.no_rm:
-            node.left, berhasil  = self._delete(node.left, no_rm)
-        elif no_rm > node.no_rm:
-            node.right, berhasil = self._delete(node.right, no_rm)
+            self.root = Node(data)
         else:
-            berhasil = True
-            if node.left is None and node.right is None:
-                return None, berhasil
-            elif node.left is None:
-                return node.right, berhasil
-            elif node.right is None:
-                return node.left, berhasil
+            self._insert(self.root, data)
+
+    def _insert(self, node, data):
+        if data < node.data:
+            if node.kiri is None:
+                node.kiri = Node(data)
             else:
-                successor            = self._min_node(node.right)
-                node.no_rm           = successor.no_rm
-                node.nama            = successor.nama
-                node.umur            = successor.umur
-                node.detail_penyakit = successor.detail_penyakit
-                node.right, _        = self._delete(node.right, successor.no_rm)
-        return node, berhasil
+                self._insert(node.kiri, data)
+        else:
+            if node.kanan is None:
+                node.kanan = Node(data)
+            else:
+                self._insert(node.kanan, data)
 
-    def _min_node(self, node):
-        while node.left:
-            node = node.left
-        return node
+    def search(self, data):
+        return self._search(self.root, data)
 
-    def inorder(self):
-        hasil = []
-        self._inorder(self.root, hasil)
-        return hasil
+    def _search(self, node, data):
+        if node is None:
+            return False
+        if node.data == data:
+            return True
+        elif data < node.data:
+            return self._search(node.kiri, data)
+        else:
+            return self._search(node.kanan, data)
 
-    def _inorder(self, node, hasil):
+    def inorder(self, node):
         if node:
-            self._inorder(node.left, hasil)
-            hasil.append(node)
-            self._inorder(node.right, hasil)
+            self.inorder(node.kiri)
+            print(node.data, end=" ")
+            self.inorder(node.kanan)
 
-    def tampil_semua(self):
-        data = self.inorder()
-        if not data:
-            print("\nBST kosong, belum ada data!")
-            return
-        print(f"\n{'No RM':<10} {'Nama':<22} {'Umur':<6} {'Penyakit':<20} {'Keparahan'}")
-        print("-" * 65)
-        for n in data:
-            dp = n.detail_penyakit
-            print(f"{n.no_rm:<10} {n.nama:<22} {n.umur:<6} {dp.nama_penyakit:<20} {dp.tingkat_keparahan}")
-        print(f"\nTotal: {len(data)} pasien")
+
+pohon = BST()
+pohon.insert(50)
+pohon.insert(30)
+pohon.insert(70)
+pohon.insert(20)
+pohon.insert(40)
+
+pohon.inorder(pohon.root)
+print()
+print(pohon.search(30))
+print(pohon.search(99))
