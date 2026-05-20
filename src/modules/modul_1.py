@@ -1,3 +1,6 @@
+# priority queue pake linked list
+# buat 5 poli
+
 class Node:
     def __init__(self, nama, prioritas):
         self.nama = nama
@@ -15,9 +18,11 @@ class PriorityQueue:
 
     def enqueue(self, nama, prioritas):
         baru = Node(nama, prioritas)
+
         if self.is_empty():
             self.head = baru
             return
+
         if prioritas == "KRITIS":
             if self.head.prioritas != "KRITIS":
                 baru.next = self.head
@@ -46,32 +51,26 @@ class PriorityQueue:
             return "antrian kosong"
         return self.head.nama
 
-    def hitung(self):
-        n = 0
-        curr = self.head
-        while curr:
-            n += 1
-            curr = curr.next
-        return n
-
     def tampil(self):
         if self.is_empty():
-            print(f"{self.poli}: kosong")
+            print(f"{self.poli} : kosong")
             return
         curr = self.head
         hasil = []
         while curr:
             hasil.append(f"{curr.nama}({curr.prioritas})")
             curr = curr.next
-        print(f"{self.poli}: {' -> '.join(hasil)}")
+        print(f"{self.poli} : {' -> '.join(hasil)}")
 
 
-umum    = PriorityQueue("poli umum")
-anak    = PriorityQueue("poli anak")
-gigi    = PriorityQueue("poli gigi")
-jantung = PriorityQueue("poli jantung")
-mata    = PriorityQueue("poli mata")
+# bikin 5 poli
+umum    = PriorityQueue("Poli Umum")
+anak    = PriorityQueue("Poli Anak")
+gigi    = PriorityQueue("Poli Gigi")
+jantung = PriorityQueue("Poli Jantung")
+mata    = PriorityQueue("Poli Mata")
 
+# daftarin pasien
 umum.enqueue("Budi", "NORMAL")
 umum.enqueue("Siti", "NORMAL")
 umum.enqueue("Andi", "KRITIS")
@@ -96,4 +95,3 @@ print("dipanggil:", umum.dequeue())
 umum.tampil()
 
 print("\nberikutnya di poli anak:", anak.peek())
-print("jumlah pasien poli anak:", anak.hitung())
