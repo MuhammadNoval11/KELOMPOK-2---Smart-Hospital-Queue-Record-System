@@ -178,20 +178,10 @@ for p in queues:
     print(f"  {p}: {queues[p].hitung()} pasien")
 print(f"bst: {bst.hitung()} data tersimpan")
 
-# grafik tren
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(8, 5))
-plt.plot(ukuran, hasil_enqueue, marker='o', label='enqueue')
-plt.plot(ukuran, hasil_dequeue, marker='o', label='dequeue')
-plt.plot(ukuran, hasil_insert,  marker='o', label='bst insert')
-plt.plot(ukuran, hasil_search,  marker='o', label='bst search')
-
-plt.xlabel('jumlah pasien (n)')
-plt.ylabel('waktu (ms)')
-plt.title('grafik tren runtime')
-plt.legend()
-plt.tight_layout()
-plt.savefig('grafik_tren.png')
-plt.show()
-print("grafik disimpan sebagai grafik_tren.png")
+# Rangkuman Tren Performa dalam Bentuk Tabel
+print("\n" + "="*75)
+print(f"{'Jumlah Pasien (n)':<18} | {'Enqueue (ms)':<12} | {'Dequeue (ms)':<12} | {'BST Insert (ms)':<15} | {'BST Search (ms)':<15}")
+print("="*75)
+for i in range(len(ukuran)):
+    print(f"{ukuran[i]:<18} | {hasil_enqueue[i]:<12.4f} | {hasil_dequeue[i]:<12.4f} | {hasil_insert[i]:<15.4f} | {hasil_search[i]:<15.4f}")
+print("="*75)
