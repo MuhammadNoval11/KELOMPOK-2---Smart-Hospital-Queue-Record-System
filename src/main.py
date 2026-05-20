@@ -495,8 +495,8 @@ poli_list = {
 }
 
 dokter_list = {
-    "d1": Stack("dr. Andi"),
-    "d2": Stack("dr. Siti"),
+    "d1": Stack("dr. Tirta"),
+    "d2": Stack("dr. Gia"),
 }
 
 rekam_medis = BST()
