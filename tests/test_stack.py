@@ -26,4 +26,8 @@ s.push(10)
 s.push(15)
 s.tampil()        
 print(s.pop())   
+<<<<<<< HEAD
 print(s.peek()) 
+=======
+print(s.peek())
+>>>>>>> feat/habibi-BTS
