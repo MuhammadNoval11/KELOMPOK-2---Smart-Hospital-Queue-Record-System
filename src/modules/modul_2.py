@@ -40,26 +40,26 @@ class Stack:
             curr = curr.next
 
 
-dokter_andi = Stack("dr. Andi")
-dokter_siti = Stack("dr. Siti")
+dokter_tirta = Stack("dr. Tirta")
+dokter_gia = Stack("dr. Gia")
 
-dokter_andi.push("cek tensi pasien Budi")
-dokter_andi.push("kasih resep obat")
-dokter_andi.push("rujuk ke poli jantung")
+dokter_tirta.push("cek tensi pasien Budi")
+dokter_tirta.push("kasih resep obat")
+dokter_tirta.push("rujuk ke poli jantung")
 
-dokter_siti.push("cek gula darah")
-dokter_siti.push("suntik insulin")
+dokter_gia.push("cek gula darah")
+dokter_gia.push("suntik insulin")
 
 print("log semua dokter:")
-dokter_andi.log_all()
-dokter_siti.log_all()
+dokter_tirta.log_all()
+dokter_gia.log_all()
 
-print("\ntindakan terakhir dr. Andi:", dokter_andi.peek())
+print("\ntindakan terakhir dr. Tirta:", dokter_tirta.peek())
 
-print("\nundo tindakan dr. Andi:")
-print("dihapus:", dokter_andi.pop())
-dokter_andi.log_all()
+print("\nundo tindakan dr. Tirta:")
+print("dihapus:", dokter_tirta.pop())
+dokter_tirta.log_all()
 
-print("\nundo tindakan dr. Siti:")
-print("dihapus:", dokter_siti.pop())
-dokter_siti.log_all()
+print("\nundo tindakan dr. Gia:")
+print("dihapus:", dokter_gia.pop())
+dokter_gia.log_all()
