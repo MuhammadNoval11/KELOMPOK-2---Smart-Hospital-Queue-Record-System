@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+from src.data_structures.linked_list import Node
+
+>>>>>>> main
 class Stack:
     def __init__(self):
         self.items = []
@@ -26,4 +31,8 @@ s.push(10)
 s.push(15)
 s.tampil()        
 print(s.pop())   
+<<<<<<< HEAD
 print(s.peek())
+=======
+print(s.peek()) 
+>>>>>>> main

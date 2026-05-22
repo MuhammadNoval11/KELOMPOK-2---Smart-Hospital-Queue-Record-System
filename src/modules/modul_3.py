@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class Node:
     def __init__(self, no_rm, data):
         self.no_rm = no_rm
@@ -92,3 +93,5 @@ print("\nhapus no rm 101")
 rm.delete(101)
 print("rekam medis setelah dihapus:")
 rm.inorder(rm.root)
+=======
+>>>>>>> main
