@@ -1,3 +1,5 @@
+from src.data_structures.linked_list import Node
+
 class Queue:
     def __init__(self):
         self.items = []
