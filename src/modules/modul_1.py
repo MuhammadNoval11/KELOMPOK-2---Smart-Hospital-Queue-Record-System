@@ -95,3 +95,5 @@ print("dipanggil:", umum.dequeue())
 umum.tampil()
 
 print("\nberikutnya di poli anak:", anak.peek())
+print("\nberikutnya di poli anak:", anak.peek())
+print("jumlah pasien poli anak:", anak.hitung())
