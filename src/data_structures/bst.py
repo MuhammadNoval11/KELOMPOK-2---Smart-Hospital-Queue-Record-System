@@ -1,61 +1,61 @@
+<<<<<<< HEAD
 from src.data_structures.linked_list import Node
 class Node:
     def __init__(self, data):
         self.data = data
         self.kiri = None
         self.kanan = None
+=======
+from dataclasses import dataclass, field
+from typing import List, Optional
+>>>>>>> dev
 
+# Struktur Data Rekam Medis sesuai starter code
+@dataclass
+class RekorMedis:
+    no_rm: int
+    nama: str
+    riwayat: List[str] = field(default_factory=list)
 
-class BST:
+class BSTNode:
+    def __init__(self, rekord: RekorMedis):
+        self.rekord = rekord
+        self.left: Optional['BSTNode'] = None
+        self.right: Optional['BSTNode'] = None
+
+class BSTRekamMedis:
     def __init__(self):
         self.root = None
 
-    def insert(self, data):
+    def insert(self, rekord: RekorMedis):
+        """Big-O: rata-rata O(log n), worst-case O(n)"""
         if self.root is None:
-            self.root = Node(data)
-        else:
-            self._insert(self.root, data)
+            self.root = BSTNode(rekord)
+            return
+        self._insert_rekursif(self.root, rekord)
 
-    def _insert(self, node, data):
-        if data < node.data:
-            if node.kiri is None:
-                node.kiri = Node(data)
+    def _insert_rekursif(self, node, rekord):
+        if rekord.no_rm < node.rekord.no_rm:
+            if node.left is None:
+                node.left = BSTNode(rekord)
             else:
-                self._insert(node.kiri, data)
-        else:
-            if node.kanan is None:
-                node.kanan = Node(data)
+                self._insert_rekursif(node.left, rekord)
+        elif rekord.no_rm > node.rekord.no_rm:
+            if node.right is None:
+                node.right = BSTNode(rekord)
             else:
-                self._insert(node.kanan, data)
+                self._insert_rekursif(node.right, rekord)
 
-    def search(self, data):
-        return self._search(self.root, data)
+    def search(self, no_rm: int):
+        """Big-O: rata-rata O(log n)"""
+        return self._search_rekursif(self.root, no_rm)
 
-    def _search(self, node, data):
+    def _search_rekursif(self, node, no_rm):
         if node is None:
-            return False
-        if node.data == data:
-            return True
-        elif data < node.data:
-            return self._search(node.kiri, data)
+            return None
+        if node.rekord.no_rm == no_rm:
+            return node.rekord
+        elif no_rm < node.rekord.no_rm:
+            return self._search_rekursif(node.left, no_rm)
         else:
-            return self._search(node.kanan, data)
-
-    def inorder(self, node):
-        if node:
-            self.inorder(node.kiri)
-            print(node.data, end=" ")
-            self.inorder(node.kanan)
-
-
-pohon = BST()
-pohon.insert(50)
-pohon.insert(30)
-pohon.insert(70)
-pohon.insert(20)
-pohon.insert(40)
-
-pohon.inorder(pohon.root)
-print()
-print(pohon.search(30))
-print(pohon.search(99))
+            return self._search_rekursif(node.right, no_rm)

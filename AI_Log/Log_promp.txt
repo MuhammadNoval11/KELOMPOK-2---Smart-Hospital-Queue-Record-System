@@ -1,0 +1,21 @@
+=========================================
+[PROMPT 1]
+Topik: Menggabungkan branch (Git Merge)
+Prompt: "tolong bantu saya buat contoh gambaran bagaimana cara bahasa pemograman untuk topik Smart-Hospital-Queue-Record-System dari pdf yang saya berikan"
+=========================================
+[PROMPT 2]
+Topik: Memindahkan spesifik file
+Prompt: "kenapa file yang ada codingannya ada di github tapi gada di vs code"
+=========================================
+[PROMPT 3]
+Topik: Error saat push ke GitHub
+Prompt: "kenapa tidak muncul branch yang lain?"
+=========================================
+[PROMPT 4]
+Topik: Menggabungkan branch (Git Merge)
+Prompt: "cara pindahkan dari branch feat ke branch def tanpa menghapus codingan"
+=========================================
+[PROMPT 5]
+Topik: Memindahkan spesifik file
+Prompt: "cara masukin prompt ai ke vs code itu gimana ?"
+=========================================

@@ -1,7 +1,23 @@
-import time
-import random
+import time, random
+from modul_1 import PriorityQueue, Pasien
+from modul_3 import BSTRekamMedis, RekorMedis
 
+def jalankan_eksperimen():
+    ukuran = [50, 200, 500]
+    for n in ukuran:
+        print(f"\n--- Eksperimen N = {n} ---")
+        q = PriorityQueue("Poli Umum")
+        bst = BSTRekamMedis()
+        
+        start = time.time()
+        for i in range(n): q.enqueue(Pasien(i, "Pasien", "umum", 3))
+        print(f"Enqueue: {(time.time()-start)*1000:.4f} ms")
+        
+        start = time.time()
+        for i in range(n): bst.insert(RekorMedis(i, "Pasien"))
+        print(f"BST Insert: {(time.time()-start)*1000:.4f} ms")
 
+<<<<<<< HEAD
 class Node:
     def __init__(self, nama, prioritas):
         self.nama = nama
@@ -185,3 +201,6 @@ print("="*75)
 for i in range(len(ukuran)):
     print(f"{ukuran[i]:<18} | {hasil_enqueue[i]:<12.4f} | {hasil_dequeue[i]:<12.4f} | {hasil_insert[i]:<15.4f} | {hasil_search[i]:<15.4f}")
 print("="*75)
+=======
+if __name__ == "__main__": jalankan_eksperimen()
+>>>>>>> dev
