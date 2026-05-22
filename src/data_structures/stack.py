@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-from src.data_structures.linked_list import Node
-=======
 from .linked_list import LLNode
->>>>>>> dev
-
 class Stack:
     """Stack berbasis Singly Linked List untuk log tindakan dokter."""
     def __init__(self, nama_dokter: str):
@@ -30,15 +25,6 @@ class Stack:
         self.size -= 1
         return tindakan_dihapus
 
-<<<<<<< HEAD
-s = Stack()
-s.push(5)
-s.push(10)
-s.push(15)
-s.tampil()        
-print(s.pop())   
-print(s.peek()) 
-=======
     def log_all(self):
         if self.is_empty():
             print(f"Log {self.nama_dokter}: Belum ada tindakan.")
@@ -49,4 +35,3 @@ print(s.peek())
         while curr:
             print(f"  - {curr.data}")
             curr = curr.next
->>>>>>> dev
