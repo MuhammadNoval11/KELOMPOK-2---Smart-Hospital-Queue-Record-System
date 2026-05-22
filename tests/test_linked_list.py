@@ -1,43 +1,19 @@
-# linked_list.py
+import time
+from dataclasses import dataclass, field
+from typing import Optional
 
-class Node:
-    def __init__(self, data):
+# Struktur Data Pasien sesuai starter code
+@dataclass
+class Pasien:
+    no_antrian: int
+    nama: str
+    poli: str
+    prioritas: int  # 1-KRITIS, 2-PRIORITAS, 3-REGULER
+    waktu_daftar: float = field(default_factory=time.time)
+    waktu_tunggu: float = 0.0
+
+# Node Universal untuk Queue dan Stack
+class LLNode:
+    def __init__(self, data=None):
         self.data = data
-        self.next = None
-
-
-class LinkedList:
-    def __init__(self):
-        self.head = None
-
-    def tambah(self, data):
-        baru = Node(data)
-        if self.head is None:
-            self.head = baru
-            return
-        curr = self.head
-        while curr.next:
-            curr = curr.next
-        curr.next = baru
-
-    def hapus(self, data):
-        if self.head is None:
-            return
-        if self.head.data == data:
-            self.head = self.head.next
-            return
-        curr = self.head
-        while curr.next:
-            if curr.next.data == data:
-                curr.next = curr.next.next
-                return
-            curr = curr.next
-
-    def tampil(self):
-        if self.head is None:
-            print("kosong")
-            return
-        curr = self.head
-        while curr:
-            print(curr.data, end=" -> " if curr.next else "\n")
-            curr = curr.next
+        self.next: Optional['LLNode'] = None
