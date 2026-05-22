@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from src.data_structures.linked_list import Node
-
-=======
->>>>>>> main
 class Queue:
     def __init__(self):
         self.items = []
