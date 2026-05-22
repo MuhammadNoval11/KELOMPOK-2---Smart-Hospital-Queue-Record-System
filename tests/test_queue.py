@@ -1,24 +1,19 @@
-class Queue:
-    def __init__(self):
-        self.items = []
+import time
+from dataclasses import dataclass, field
+from typing import Optional
 
-    def enqueue(self, data):
-        self.items.append(data)
+# Struktur Data Pasien sesuai starter code
+@dataclass
+class Pasien:
+    no_antrian: int
+    nama: str
+    poli: str
+    prioritas: int  # 1-KRITIS, 2-PRIORITAS, 3-REGULER
+    waktu_daftar: float = field(default_factory=time.time)
+    waktu_tunggu: float = 0.0
 
-    def dequeue(self):
-        if not self.is_empty():
-            return self.items.pop(0)
-        return "Queue kosong"
-
-    def is_empty(self):
-        return len(self.items) == 0
-
-    def tampil(self):
-        print(self.items)
-q = Queue()
-q.enqueue(1)
-q.enqueue(2)
-q.enqueue(3)
-q.tampil()
-print(q.dequeue())
-q.tampil()
+# Node Universal untuk Queue dan Stack
+class LLNode:
+    def __init__(self, data=None):
+        self.data = data
+        self.next: Optional['LLNode'] = None
