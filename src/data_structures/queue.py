@@ -1,5 +1,4 @@
-from .linked_list import LLNode, Pasien
-
+from linked_list import LLNode, Pasien
 class PriorityQueue:
     """Priority Queue berbasis Singly Linked List, terurut prioritas ASC."""
     def __init__(self, nama_poli: str):
