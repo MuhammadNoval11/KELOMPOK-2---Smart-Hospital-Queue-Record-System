@@ -1,206 +1,158 @@
-import time, random
-from modul_1 import PriorityQueue, Pasien
-from modul_3 import BSTRekamMedis, RekorMedis
+import time
+import random
+# import numpy as np
+from dataclasses import dataclass, field
+from typing import Optional, List
 
-def jalankan_eksperimen():
-    ukuran = [50, 200, 500]
-    for n in ukuran:
-        print(f"\n--- Eksperimen N = {n} ---")
-        q = PriorityQueue("Poli Umum")
-        bst = BSTRekamMedis()
-        
-        start = time.time()
-        for i in range(n): q.enqueue(Pasien(i, "Pasien", "umum", 3))
-        print(f"Enqueue: {(time.time()-start)*1000:.4f} ms")
-        
-        start = time.time()
-        for i in range(n): bst.insert(RekorMedis(i, "Pasien"))
-        print(f"BST Insert: {(time.time()-start)*1000:.4f} ms")
+# 1. Set seed acak sesuai kewajiban di panduan agar hasil bisa direproduksi
+# np.random.seed(42)
+random.seed(42)
 
-<<<<<<< HEAD
-class Node:
-    def __init__(self, nama, prioritas):
-        self.nama = nama
-        self.prioritas = prioritas
-        self.next = None
+# ==========================================
+# CLASS STRUKTUR DATA (Disederhanakan untuk Pengujian)
+# ==========================================
+@dataclass
+class Pasien:
+    no_antrian: int
+    nama: str
+    poli: str
+    prioritas: int
 
-class NodeBST:
-    def __init__(self, no_rm, data):
-        self.no_rm = no_rm
+@dataclass
+class RekorMedis:
+    no_rm: int
+    nama: str
+    riwayat: List[str] = field(default_factory=list)
+
+class LLNode:
+    def __init__(self, data):
         self.data = data
-        self.left = None
-        self.right = None
-
+        self.next: Optional['LLNode'] = None
 
 class PriorityQueue:
-    def __init__(self, poli):
-        self.poli = poli
-        self.head = None
+    def __init__(self):
+        self.head: Optional[LLNode] = None
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return self.head is None
 
-    def enqueue(self, nama, prioritas):
-        baru = Node(nama, prioritas)
+    def enqueue(self, pasien: Pasien):
+        baru = LLNode(pasien)
         if self.is_empty():
             self.head = baru
             return
-        if prioritas == "KRITIS":
-            if self.head.prioritas != "KRITIS":
-                baru.next = self.head
-                self.head = baru
-            else:
-                curr = self.head
-                while curr.next and curr.next.prioritas == "KRITIS":
-                    curr = curr.next
-                baru.next = curr.next
-                curr.next = baru
+        
+        # Logika prioritas: 1 (KRITIS) paling depan
+        if baru.data.prioritas < self.head.data.prioritas:
+            baru.next = self.head
+            self.head = baru
         else:
             curr = self.head
-            while curr.next:
+            while curr.next and curr.next.data.prioritas <= baru.data.prioritas:
                 curr = curr.next
+            baru.next = curr.next
             curr.next = baru
 
     def dequeue(self):
         if self.is_empty():
             return None
-        nama = self.head.nama
+        data = self.head.data
         self.head = self.head.next
-        return nama
+        return data
 
-    def hitung(self):
-        n = 0
-        curr = self.head
-        while curr:
-            n += 1
-            curr = curr.next
-        return n
+class BSTNode:
+    def __init__(self, rekord: RekorMedis):
+        self.rekord = rekord
+        self.left: Optional['BSTNode'] = None
+        self.right: Optional['BSTNode'] = None
 
-
-class BST:
+class BSTRekamMedis:
     def __init__(self):
-        self.root = None
+        self.root: Optional[BSTNode] = None
 
-    def insert(self, no_rm, data):
-        baru = NodeBST(no_rm, data)
+    def insert(self, rekord: RekorMedis):
         if self.root is None:
-            self.root = baru
+            self.root = BSTNode(rekord)
             return
         curr = self.root
         while True:
-            if no_rm < curr.no_rm:
+            if rekord.no_rm < curr.rekord.no_rm:
                 if curr.left is None:
-                    curr.left = baru
+                    curr.left = BSTNode(rekord)
                     break
                 curr = curr.left
-            elif no_rm > curr.no_rm:
+            elif rekord.no_rm > curr.rekord.no_rm:
                 if curr.right is None:
-                    curr.right = baru
+                    curr.right = BSTNode(rekord)
                     break
                 curr = curr.right
             else:
                 break
 
-    def search(self, no_rm):
+    def search(self, no_rm: int):
         curr = self.root
         while curr:
-            if no_rm == curr.no_rm:
-                return curr.data
-            elif no_rm < curr.no_rm:
+            if no_rm == curr.rekord.no_rm:
+                return curr.rekord
+            elif no_rm < curr.rekord.no_rm:
                 curr = curr.left
             else:
                 curr = curr.right
         return None
 
-    def hitung(self):
-        return self._hitung(self.root)
+# ==========================================
+# FUNGSI EKSPERIMEN & VALIDASI
+# ==========================================
+def jalankan_eksperimen():
+    POLI = ['Umum', 'Jantung', 'Ortopedi', 'Anak', 'Gigi']
+    N_list = [50, 200, 500]
+    
+    print("=" * 75)
+    print("Hasil Eksperimen & Validasi Runtime (Seed=42)")
+    print("=" * 75)
+    print(f"{'N':<5} | {'Enqueue (s)':<15} | {'Dequeue (s)':<15} | {'BST Insert (s)':<15} | {'BST Search (s)':<15}")
+    print("-" * 75)
 
-    def _hitung(self, node):
-        if node is None:
-            return 0
-        return 1 + self._hitung(node.left) + self._hitung(node.right)
+    for n in N_list:
+        pq = PriorityQueue()
+        bst = BSTRekamMedis()
+        
+        # Siapkan N data pasien dan N data rekam medis acak
+        data_pasien = [Pasien(i, f"Pasien{i}", random.choice(POLI), random.randint(1, 3)) for i in range(n)]
+        
+        # Acak nomor RM agar BST tidak menjadi garis lurus (skewed)
+        nomor_rm_acak = random.sample(range(1, 10000), n)
+        data_rm = [RekorMedis(no, f"Pasien{no}") for no in nomor_rm_acak]
 
+        # 1. Uji Runtime Enqueue
+        start_waktu = time.time()
+        for p in data_pasien:
+            pq.enqueue(p)
+        waktu_enqueue = time.time() - start_waktu
 
-nama_pasien = ["Budi", "Siti", "Andi", "Rudi", "Wati",
-               "Hasan", "Dewi", "Fajar", "Rina", "Tono"]
-poli_nama   = ["umum", "anak", "gigi", "jantung", "mata"]
-pri_list    = ["NORMAL", "NORMAL", "NORMAL", "KRITIS"]
+        # 2. Uji Runtime Dequeue
+        start_waktu = time.time()
+        while not pq.is_empty():
+            pq.dequeue()
+        waktu_dequeue = time.time() - start_waktu
 
-random.seed(42)
-ukuran = [50, 200, 500]
+        # 3. Uji Runtime BST Insert
+        start_waktu = time.time()
+        for rm in data_rm:
+            bst.insert(rm)
+        waktu_bst_insert = time.time() - start_waktu
 
-hasil_enqueue = []
-hasil_dequeue = []
-hasil_insert  = []
-hasil_search  = []
+        # 4. Uji Runtime BST Search (Mencari semua data yang ada)
+        start_waktu = time.time()
+        for rm in data_rm:
+            bst.search(rm.no_rm)
+        waktu_bst_search = time.time() - start_waktu
 
-for n in ukuran:
-    data_pasien = [(random.choice(nama_pasien) + str(i),
-                    random.choice(poli_nama),
-                    random.choice(pri_list)) for i in range(n)]
+        # Format output angka desimal agar presisi (6 angka di belakang koma)
+        print(f"{n:<5} | {waktu_enqueue:<15.6f} | {waktu_dequeue:<15.6f} | {waktu_bst_insert:<15.6f} | {waktu_bst_search:<15.6f}")
+    
+    print("=" * 75)
+    print("Catatan: Salin tabel angka di atas untuk dimasukkan ke dalam laporan akhir.")
 
-    queues = {p: PriorityQueue(p) for p in poli_nama}
-
-    awal = time.time()
-    for nama, poli, pri in data_pasien:
-        queues[poli].enqueue(nama, pri)
-    t_enqueue = (time.time() - awal) * 1000
-
-    awal = time.time()
-    for poli in queues:
-        while not queues[poli].is_empty():
-            queues[poli].dequeue()
-    t_dequeue = (time.time() - awal) * 1000
-
-    bst = BST()
-    no_rm_list = random.sample(range(1000, 9999), n)
-
-    awal = time.time()
-    for i, no_rm in enumerate(no_rm_list):
-        bst.insert(no_rm, f"pasien_{i}")
-    t_insert = (time.time() - awal) * 1000
-
-    awal = time.time()
-    for no_rm in no_rm_list:
-        bst.search(no_rm)
-    t_search = (time.time() - awal) * 1000
-
-    hasil_enqueue.append(t_enqueue)
-    hasil_dequeue.append(t_dequeue)
-    hasil_insert.append(t_insert)
-    hasil_search.append(t_search)
-
-    print(f"n = {n}")
-    print(f"  enqueue   : {t_enqueue:.4f} ms")
-    print(f"  dequeue   : {t_dequeue:.4f} ms")
-    print(f"  bst insert: {t_insert:.4f} ms")
-    print(f"  bst search: {t_search:.4f} ms")
-    print()
-
-# konfirmasi struktur
-random.seed(42)
-queues = {p: PriorityQueue(p) for p in poli_nama}
-bst    = BST()
-
-for i in range(10):
-    nama = random.choice(nama_pasien) + str(i)
-    poli = random.choice(poli_nama)
-    pri  = random.choice(pri_list)
-    queues[poli].enqueue(nama, pri)
-    bst.insert(1000 + i, f"{nama} | poli: {poli}")
-
-print("isi queue per poli:")
-for p in queues:
-    print(f"  {p}: {queues[p].hitung()} pasien")
-print(f"bst: {bst.hitung()} data tersimpan")
-
-# Rangkuman Tren Performa dalam Bentuk Tabel
-print("\n" + "="*75)
-print(f"{'Jumlah Pasien (n)':<18} | {'Enqueue (ms)':<12} | {'Dequeue (ms)':<12} | {'BST Insert (ms)':<15} | {'BST Search (ms)':<15}")
-print("="*75)
-for i in range(len(ukuran)):
-    print(f"{ukuran[i]:<18} | {hasil_enqueue[i]:<12.4f} | {hasil_dequeue[i]:<12.4f} | {hasil_insert[i]:<15.4f} | {hasil_search[i]:<15.4f}")
-print("="*75)
-=======
-if __name__ == "__main__": jalankan_eksperimen()
->>>>>>> dev
+if __name__ == "__main__":
+    jalankan_eksperimen()
