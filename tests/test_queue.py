@@ -9,6 +9,33 @@ class PriorityQueue:
     def is_empty(self):
         return self.head is None
 
+
+from src.data_structures.linked_list import Node
+
+class Queue:
+    def __init__(self):
+        self.items = []
+
+    def enqueue(self, data):
+        self.items.append(data)
+
+    def dequeue(self):
+        if not self.is_empty():
+            return self.items.pop(0)
+        return "Queue kosong"
+
+from src.data_structures.linked_list import LLNode, Pasien
+class PriorityQueue:
+    """Priority Queue berbasis Singly Linked List, terurut prioritas ASC."""
+    def __init__(self, nama_poli: str):
+        self.poli = nama_poli
+        self.head = None
+        self.size = 0
+
+
+    def is_empty(self):
+        return self.head is None
+    
     def enqueue(self, pasien: Pasien):
         """Big-O: O(n) worst-case"""
         baru = LLNode(pasien)
