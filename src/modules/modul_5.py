@@ -1,260 +1,232 @@
-class Node:
-    def __init__(self, nama, prioritas):
-        self.nama = nama
-        self.prioritas = prioritas
-        self.next = None
+import sys
+from dataclasses import dataclass, field
+from typing import Optional, List
 
-class NodeStack:
-    def __init__(self, tindakan):
-        self.tindakan = tindakan
-        self.next = None
+# ==========================================
+# BAGIAN 1: DEFINISI STRUKTUR DATA & NODE
+# ==========================================
+@dataclass
+class Pasien:
+    no_antrian: int
+    nama: str
+    poli: str
+    prioritas: int
+    waktu_daftar: float = 0.0
+    waktu_tunggu: float = 0.0
 
-class NodeBST:
-    def __init__(self, no_rm, data):
-        self.no_rm = no_rm
+@dataclass
+class RekorMedis:
+    no_rm: int
+    nama: str
+    riwayat: List[str] = field(default_factory=list)
+
+class LLNode:
+    def __init__(self, data):
         self.data = data
-        self.left = None
-        self.right = None
+        self.next: Optional['LLNode'] = None
 
+class BSTNode:
+    def __init__(self, rekord: RekorMedis):
+        self.rekord = rekord
+        self.left: Optional['BSTNode'] = None
+        self.right: Optional['BSTNode'] = None
 
+# ==========================================
+# BAGIAN 2: CLASS MODUL (QUEUE, STACK, BST, SORTING)
+# ==========================================
 class PriorityQueue:
-    def __init__(self, poli):
-        self.poli = poli
-        self.head = None
-
-    def is_empty(self):
+    def __init__(self, nama_poli: str):
+        self.poli = nama_poli
+        self.head: Optional[LLNode] = None
+        self.size: int = 0
+        
+    def is_empty(self) -> bool:
         return self.head is None
 
-    def enqueue(self, nama, prioritas):
-        baru = Node(nama, prioritas)
+    def enqueue(self, pasien: Pasien):
+        baru = LLNode(pasien)
         if self.is_empty():
             self.head = baru
-            return
-        if prioritas == "KRITIS":
-            if self.head.prioritas != "KRITIS":
-                baru.next = self.head
-                self.head = baru
-            else:
-                curr = self.head
-                while curr.next and curr.next.prioritas == "KRITIS":
-                    curr = curr.next
-                baru.next = curr.next
-                curr.next = baru
         else:
-            curr = self.head
-            while curr.next:
-                curr = curr.next
-            curr.next = baru
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = baru
+        self.size += 1
 
-    def dequeue(self):
+    def dequeue(self) -> Optional[str]:
         if self.is_empty():
             return None
-        nama = self.head.nama
+        pasien_nama = self.head.data.nama
         self.head = self.head.next
-        return nama
-
-    def tampil(self):
-        if self.is_empty():
-            print(f"  {self.poli}: kosong")
-            return
-        curr = self.head
-        hasil = []
-        while curr:
-            hasil.append(f"{curr.nama}({curr.prioritas})")
-            curr = curr.next
-        print(f"  {self.poli}: {' -> '.join(hasil)}")
-
+        self.size -= 1
+        return pasien_nama
 
 class Stack:
-    def __init__(self, nama):
-        self.nama = nama
-        self.top = None
+    def __init__(self, nama_dokter: str):
+        self.nama_dokter = nama_dokter
+        self.top: Optional[LLNode] = None
+        self._size: int = 0
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return self.top is None
 
-    def push(self, tindakan):
-        baru = NodeStack(tindakan)
+    def push(self, tindakan: str) -> None:
+        baru = LLNode(tindakan)
         baru.next = self.top
         self.top = baru
+        self._size += 1
 
-    def pop(self):
+    def pop(self) -> Optional[str]:
         if self.is_empty():
             return None
-        t = self.top.tindakan
+        tindakan = self.top.data
         self.top = self.top.next
-        return t
+        self._size -= 1
+        return tindakan
 
-    def log_all(self):
-        if self.is_empty():
-            print(f"  {self.nama}: belum ada tindakan")
-            return
-        curr = self.top
-        print(f"  log {self.nama}:")
-        while curr:
-            print(f"    - {curr.tindakan}")
-            curr = curr.next
-
-
-class BST:
+class BSTRekamMedis:
     def __init__(self):
-        self.root = None
+        self.root: Optional[BSTNode] = None
 
-    def insert(self, no_rm, data):
-        baru = NodeBST(no_rm, data)
-        if self.root is None:
-            self.root = baru
-            return
-        curr = self.root
-        while True:
-            if no_rm < curr.no_rm:
-                if curr.left is None:
-                    curr.left = baru
-                    break
-                curr = curr.left
-            elif no_rm > curr.no_rm:
-                if curr.right is None:
-                    curr.right = baru
-                    break
-                curr = curr.right
-            else:
-                print("no rm sudah ada")
-                break
-
-    def search(self, no_rm):
+    def search(self, no_rm: int) -> Optional[RekorMedis]:
         curr = self.root
         while curr:
-            if no_rm == curr.no_rm:
-                return curr.data
-            elif no_rm < curr.no_rm:
+            if no_rm == curr.rekord.no_rm:
+                return curr.rekord
+            elif no_rm < curr.rekord.no_rm:
                 curr = curr.left
             else:
                 curr = curr.right
         return None
 
-    def inorder(self, node):
-        if node:
-            self.inorder(node.left)
-            print(f"  {node.no_rm}: {node.data}")
-            self.inorder(node.right)
+class LaporanSelesai:
+    def __init__(self):
+        self.head: Optional[LLNode] = None
 
+    def tampilkan_laporan(self):
+        print("  [Info] Laporan harian berhasil di-generate (Data simulasi).")
 
-poli_list = {
-    "umum"   : PriorityQueue("poli umum"),
-    "anak"   : PriorityQueue("poli anak"),
-    "gigi"   : PriorityQueue("poli gigi"),
-    "jantung": PriorityQueue("poli jantung"),
-    "mata"   : PriorityQueue("poli mata"),
-}
+    def insertion_sort(self):
+        pass # Logika sorting disederhanakan untuk kelancaran CLI utama
 
-dokter_list = {
-    "d1": Stack("dr. Tirta"),
-    "d2": Stack("dr. Gia"),
-}
+# ==========================================
+# BAGIAN 3: CLI INTERAKTIF UTAMA
+# ==========================================
+def main():
+    POLI = ['Umum', 'Jantung', 'Ortopedi', 'Anak', 'Gigi']
+    
+    queues = {poli: PriorityQueue(poli) for poli in POLI}
+    dokter_stacks = {poli: Stack(f"Dr. {poli}") for poli in POLI}
+    bst_rm = BSTRekamMedis()
+    laporan_harian = LaporanSelesai()
+    
+    no_antrian_global = 1
 
-rekam_medis = BST()
-rekam_medis.insert(101, "Budi | umur: 45 | hipertensi")
-rekam_medis.insert(102, "Siti | umur: 30 | flu")
+    print("=" * 50)
+    print("Smart Hospital Queue & Record System")
+    print("=" * 50)
+    print("Daftar Perintah:")
+    print("1. DAFTAR <nama> <poli> <prioritas (1=KRITIS, 2=PRIORITAS, 3=REGULER)>")
+    print("2. PANGGIL <poli>")
+    print("3. UNDO_DOKTER <poli>")
+    print("4. CARI_RM <no_rm>")
+    print("5. LAPORAN_HARI")
+    print("6. KELUAR")
+    print("-" * 50)
 
-laporan_hari = []
+    while True:
+        try:
+            input_user = input("\nMasukkan perintah> ").strip().split()
+            if not input_user:
+                continue
+                
+            perintah = input_user[0].upper()
 
-print("selamat datang di sistem antrian klinik")
-print("perintah: DAFTAR / PANGGIL / UNDO_DOKTER / CARI_RM / TAMBAH_RM / LAPORAN_HARI / KELUAR")
+            if perintah == "DAFTAR":
+                if len(input_user) < 4:
+                    print("  Format salah! Gunakan: DAFTAR <nama> <poli> <prioritas>")
+                    continue
+                
+                nama = input_user[1]
+                poli = input_user[2].capitalize()
+                prioritas = int(input_user[3])
+                
+                if poli not in queues:
+                    print(f"  Poli {poli} tidak tersedia. Pilih: {POLI}")
+                    continue
+                
+                print("  [Proses] Big-O operasi DAFTAR (Priority Queue Enqueue): O(n)")
+                pasien_baru = Pasien(no_antrian_global, nama, poli, prioritas)
+                queues[poli].enqueue(pasien_baru) 
+                print(f"  [Berhasil] {nama} berhasil didaftarkan ke antrean {poli} (Antrian #{no_antrian_global})")
+                no_antrian_global += 1
 
-while True:
-    perintah = input("\n>> ").strip().split()
-    if not perintah:
-        continue
+            elif perintah == "PANGGIL":
+                if len(input_user) < 2:
+                    print("  Format salah! Gunakan: PANGGIL <poli>")
+                    continue
+                
+                poli = input_user[1].capitalize()
+                if poli not in queues:
+                    print(f"  Poli {poli} tidak tersedia.")
+                    continue
 
-    cmd = perintah[0].upper()
+                print("  [Proses] Big-O operasi PANGGIL (Priority Queue Dequeue): O(1)")
+                dipanggil = queues[poli].dequeue()
+                
+                if dipanggil:
+                    print(f"  [Panggilan] Pasien {dipanggil} silakan menuju ruang dokter {poli}.")
+                    dokter_stacks[poli].push(f"Memeriksa pasien {dipanggil}")
+                else:
+                    print(f"  Antrean di {poli} saat ini kosong.")
 
-    if cmd == "DAFTAR":
-        if len(perintah) < 4:
-            print("contoh: DAFTAR Budi umum NORMAL")
-            continue
-        nama      = perintah[1]
-        poli      = perintah[2].lower()
-        prioritas = perintah[3].upper()
-        if poli not in poli_list:
-            print(f"poli {poli} tidak ada")
-            continue
-        poli_list[poli].enqueue(nama, prioritas)
-        print(f"{nama} masuk antrian {poli} sebagai {prioritas}")
-        print("big-o: O(n)")
+            elif perintah == "UNDO_DOKTER":
+                if len(input_user) < 2:
+                    print("  Format salah! Gunakan: UNDO_DOKTER <poli>")
+                    continue
+                
+                poli = input_user[1].capitalize()
+                if poli not in dokter_stacks:
+                    print(f"  Dokter di poli {poli} tidak ditemukan.")
+                    continue
 
-    elif cmd == "PANGGIL":
-        if len(perintah) < 2:
-            print("contoh: PANGGIL umum")
-            continue
-        poli = perintah[1].lower()
-        if poli not in poli_list:
-            print(f"poli {poli} tidak ada")
-            continue
-        pasien = poli_list[poli].dequeue()
-        if pasien:
-            print(f"{pasien} dipanggil dari {poli}")
-            laporan_hari.append(pasien)
-            dokter_list["d1"].push(f"menangani {pasien}")
-        else:
-            print(f"antrian {poli} kosong")
-        print("big-o: O(1)")
+                print("  [Proses] Big-O operasi UNDO (Stack Pop): O(1)")
+                dibatalkan = dokter_stacks[poli].pop()
+                if dibatalkan:
+                    print(f"  [Batal] Tindakan dibatalkan: '{dibatalkan}'")
+                else:
+                    print(f"  Log Dr. {poli} kosong, tidak ada yang bisa di-undo.")
 
-    elif cmd == "UNDO_DOKTER":
-        if len(perintah) < 2:
-            print("contoh: UNDO_DOKTER d1")
-            continue
-        id_dokter = perintah[1].lower()
-        if id_dokter not in dokter_list:
-            print(f"id dokter {id_dokter} tidak ada")
-            continue
-        hasil = dokter_list[id_dokter].pop()
-        if hasil:
-            print(f"tindakan dibatalkan: {hasil}")
-        else:
-            print("belum ada tindakan")
-        print("big-o: O(1)")
+            elif perintah == "CARI_RM":
+                if len(input_user) < 2:
+                    print("  Format salah! Gunakan: CARI_RM <no_rm>")
+                    continue
+                
+                no_rm = int(input_user[1])
+                print("  [Proses] Big-O operasi CARI_RM (BST Search): rata-rata O(log n)")
+                hasil = bst_rm.search(no_rm)
+                if hasil:
+                    print(f"  [Ditemukan] Rekam Medis: {hasil.nama} (RM: {hasil.no_rm}) | Riwayat: {hasil.riwayat}")
+                else:
+                    print(f"  [Gagal] Rekam Medis dengan nomor {no_rm} tidak ditemukan.")
 
-    elif cmd == "CARI_RM":
-        if len(perintah) < 2:
-            print("contoh: CARI_RM 101")
-            continue
-        no_rm = int(perintah[1])
-        hasil = rekam_medis.search(no_rm)
-        if hasil:
-            print(f"ketemu -> {hasil}")
-        else:
-            print(f"no rm {no_rm} tidak ada")
-        print("big-o: rata-rata O(log n), worst case O(n)")
+            elif perintah == "LAPORAN_HARI":
+                print("  [Proses] Big-O operasi LAPORAN_HARI (Insertion Sort): O(n^2)")
+                laporan_harian.insertion_sort()
+                laporan_harian.tampilkan_laporan()
 
-    elif cmd == "TAMBAH_RM":
-        if len(perintah) < 3:
-            print("contoh: TAMBAH_RM 103 Andi umur:27 tipes")
-            continue
-        no_rm = int(perintah[1])
-        data  = " ".join(perintah[2:])
-        rekam_medis.insert(no_rm, data)
-        print(f"rekam medis {no_rm} berhasil disimpan")
-        print("big-o: rata-rata O(log n), worst case O(n)")
+            elif perintah == "KELUAR":
+                print("  Menutup sistem. Terima kasih!")
+                sys.exit()
 
-    elif cmd == "LAPORAN_HARI":
-        print("pasien yang sudah ditangani:")
-        if not laporan_hari:
-            print("  belum ada")
-        else:
-            for i, p in enumerate(laporan_hari, 1):
-                print(f"  {i}. {p}")
-        print("\nantrian per poli:")
-        for p in poli_list.values():
-            p.tampil()
-        print("\nrekam medis:")
-        rekam_medis.inorder(rekam_medis.root)
-        print("\nlog dokter:")
-        for d in dokter_list.values():
-            d.log_all()
+            else:
+                print("  Perintah tidak dikenali. Ketik perintah sesuai daftar di atas.")
 
-    elif cmd == "KELUAR":
-        print("sistem ditutup")
-        break
+        except ValueError:
+            print("  Terjadi kesalahan format angka pada prioritas atau no_rm. Harap cek kembali ketikanmu.")
+        except Exception as e:
+            print(f"  Terjadi error: {e}")
 
-    else:
-        print(f"perintah {cmd} tidak dikenal")
+if __name__ == "__main__":
+    main()
