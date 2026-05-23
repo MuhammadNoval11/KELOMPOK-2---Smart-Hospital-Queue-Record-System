@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from typing import Optional
 
 # Bikin class LLNode langsung di sini biar nggak error nyari file eksternal
@@ -78,3 +79,5 @@ if __name__ == "__main__":
 
     print()
     s.log_all()
+=======
+>>>>>>> feat/Belva-EksperimenValidasi

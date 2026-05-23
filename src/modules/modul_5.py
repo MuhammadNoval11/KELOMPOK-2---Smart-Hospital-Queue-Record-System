@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import sys
 from dataclasses import dataclass, field
 from typing import Optional, List
@@ -230,3 +231,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+=======
+>>>>>>> feat/Belva-EksperimenValidasi
