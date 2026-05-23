@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from dataclasses import dataclass, field
 from typing import Optional, List
 
@@ -98,5 +97,3 @@ if __name__ == "__main__":
     semua_data = bst.inorder()
     for data in semua_data:
         print(f"  RM {data.no_rm} - {data.nama}")
-=======
->>>>>>> feat/Belva-EksperimenValidasi

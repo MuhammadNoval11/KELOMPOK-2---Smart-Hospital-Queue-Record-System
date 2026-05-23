@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 from dataclasses import dataclass
 from typing import Optional
 
@@ -119,7 +117,3 @@ if __name__ == "__main__":
 
     print("\n=== Laporan SETELAH Diurutkan ===")
     laporan.tampilkan_laporan()
-=======
->>>>>>> feat/Belva-CLI
-=======
->>>>>>> feat/Belva-EksperimenValidasi
