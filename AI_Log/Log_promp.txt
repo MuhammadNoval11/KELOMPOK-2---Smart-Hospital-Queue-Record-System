@@ -19,3 +19,15 @@ Prompt: "cara pindahkan dari branch feat ke branch def tanpa menghapus codingan"
 Topik: Memindahkan spesifik file
 Prompt: "cara masukin prompt ai ke vs code itu gimana ?"
 =========================================
+[PROMPT 6]
+Topik: memastikan agar tidak terhapus
+Prompt: "itu berarti nambahnya kebagian data structures kan?, nah apakah itu berpengaruh kebagian modules ?"
+=========================================
+[PROMPT 7]
+Topik: memastikan isi data struktur
+Prompt: "perlu graph.py dan linked_list kah di data struktur ?"
+=========================================
+[PROMPT 8]
+Topik: mengimplementasikan codingan modul
+Prompt: "buatkan saya gambaran codingan modul 1-6 ?"
+=========================================
