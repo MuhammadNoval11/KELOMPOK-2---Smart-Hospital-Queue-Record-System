@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from typing import Optional
 
 class Pasien:
@@ -77,3 +78,5 @@ if __name__ == "__main__":
     
     # Liat sisa antrean
     antrean_ugd.tampilkan()
+=======
+>>>>>>> feat/habibi-BST
