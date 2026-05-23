@@ -1,83 +1,119 @@
-class Node:
-    def __init__(self, nama, waktu_tunggu, no_antrian):
-        self.nama = nama
-        self.waktu_tunggu = waktu_tunggu
-        self.no_antrian = no_antrian
-        self.next = None
+from dataclasses import dataclass
+from typing import Optional
 
+# 1. Struktur Data Pasien (Diambil dari template PDF)
+@dataclass
+class Pasien:
+    no_antrian: int
+    nama: str
+    poli: str
+    prioritas: int
+    waktu_daftar: float = 0.0
+    waktu_tunggu: float = 0.0
 
-class LinkedList:
+# 2. Struktur Node Linked List
+class LLNode:
+    def __init__(self, data: Pasien):
+        self.data = data
+        self.next: Optional['LLNode'] = None
+
+# 3. Class untuk Laporan dan Sorting
+class LaporanSelesai:
     def __init__(self):
-        self.head = None
+        self.head: Optional[LLNode] = None
 
-    def tambah(self, nama, waktu_tunggu, no_antrian):
-        baru = Node(nama, waktu_tunggu, no_antrian)
-        if self.head is None:
-            self.head = baru
-            return
-        curr = self.head
-        while curr.next:
-            curr = curr.next
-        curr.next = baru
+    def tambah_pasien_selesai(self, pasien: Pasien):
+        """Menambahkan pasien ke daftar riwayat (tanpa urutan)."""
+        baru = LLNode(pasien)
+        baru.next = self.head
+        self.head = baru
 
-    def tampil(self):
-        curr = self.head
-        while curr:
-            print(f"  {curr.nama} | tunggu: {curr.waktu_tunggu} menit | no: {curr.no_antrian}")
-            curr = curr.next
-
-    def insertion_sort_waktu(self):
-        if self.head is None:
-            return
+    def insertion_sort(self):
+        """
+        Mengurutkan daftar pasien selesai langsung pada Linked List.
+        Big-O: O(n^2).
+        Kriteria: 
+        1. waktu_tunggu DESC (paling lama di atas)
+        2. no_antrian ASC (nomor kecil di atas jika waktu tunggu sama)
+        """
+        if self.head is None or self.head.next is None:
+            return  # Tidak perlu diurutkan jika kosong atau cuma 1 data
+        
         sorted_head = None
-        curr = self.head
-        while curr:
-            next_node = curr.next
-            sorted_head = self._insert_sorted(sorted_head, curr)
-            curr = next_node
+        current = self.head
+
+        while current is not None:
+            next_node = current.next
+            
+            # Kondisi 1: List yang sudah diurutkan masih kosong
+            if sorted_head is None:
+                current.next = None
+                sorted_head = current
+                
+            # Kondisi 2: Sisipkan di posisi paling depan (Head baru)
+            elif (current.data.waktu_tunggu > sorted_head.data.waktu_tunggu) or \
+                 (current.data.waktu_tunggu == sorted_head.data.waktu_tunggu and current.data.no_antrian < sorted_head.data.no_antrian):
+                current.next = sorted_head
+                sorted_head = current
+                
+            # Kondisi 3: Cari posisi yang tepat di tengah atau akhir
+            else:
+                search = sorted_head
+                while search.next is not None:
+                    # Cek apakah posisi current seharusnya di antara search dan search.next
+                    waktu_lebih_lama = current.data.waktu_tunggu > search.next.data.waktu_tunggu
+                    waktu_sama_antrian_kecil = (current.data.waktu_tunggu == search.next.data.waktu_tunggu) and (current.data.no_antrian < search.next.data.no_antrian)
+                    
+                    if waktu_lebih_lama or waktu_sama_antrian_kecil:
+                        break
+                    search = search.next
+                
+                # Sisipkan node
+                current.next = search.next
+                search.next = current
+                
+            current = next_node
+        
+        # Perbarui head dengan list yang sudah terurut
         self.head = sorted_head
 
-    def _insert_sorted(self, sorted_head, baru):
-        baru.next = None
-        if sorted_head is None or baru.waktu_tunggu > sorted_head.waktu_tunggu:
-            baru.next = sorted_head
-            return baru
-        curr = sorted_head
-        while curr.next and curr.next.waktu_tunggu >= baru.waktu_tunggu:
-            curr = curr.next
-        baru.next = curr.next
-        curr.next = baru
-        return sorted_head
+    def tampilkan_laporan(self):
+        """Mencetak laporan ke terminal."""
+        if self.head is None:
+            print("  Laporan kosong.")
+            return
 
-    def selection_sort_antrian(self):
+        print(f"{'No. Antrian':<15} | {'Nama':<15} | {'Waktu Tunggu (menit)':<20}")
+        print("-" * 55)
         curr = self.head
         while curr:
-            min_node = curr
-            cari = curr.next
-            while cari:
-                if cari.no_antrian < min_node.no_antrian:
-                    min_node = cari
-                cari = cari.next
-            curr.nama, min_node.nama = min_node.nama, curr.nama
-            curr.waktu_tunggu, min_node.waktu_tunggu = min_node.waktu_tunggu, curr.waktu_tunggu
-            curr.no_antrian, min_node.no_antrian = min_node.no_antrian, curr.no_antrian
+            print(f"{curr.data.no_antrian:<15} | {curr.data.nama:<15} | {curr.data.waktu_tunggu:<20}")
             curr = curr.next
+        print("-" * 55)
 
+# ==========================================
+# Blok Eksekusi (Uji Coba Standalone)
+# ==========================================
+if __name__ == "__main__":
+    laporan = LaporanSelesai()
 
-laporan = LinkedList()
-laporan.tambah("Budi", 45, 3)
-laporan.tambah("Siti", 20, 1)
-laporan.tambah("Andi", 60, 5)
-laporan.tambah("Rudi", 35, 2)
-laporan.tambah("Wati", 50, 4)
+    # Membuat data pasien tiruan
+    p1 = Pasien(no_antrian=1, nama="Budi", poli="Umum", prioritas=3, waktu_tunggu=15.0)
+    p2 = Pasien(no_antrian=2, nama="Siti", poli="Jantung", prioritas=1, waktu_tunggu=45.0)
+    p3 = Pasien(no_antrian=3, nama="Agus", poli="Gigi", prioritas=3, waktu_tunggu=15.0)
+    p4 = Pasien(no_antrian=4, nama="Dina", poli="Anak", prioritas=2, waktu_tunggu=30.0)
 
-print("data awal:")
-laporan.tampil()
+    # Memasukkan secara acak
+    laporan.tambah_pasien_selesai(p1)
+    laporan.tambah_pasien_selesai(p4)
+    laporan.tambah_pasien_selesai(p2)
+    laporan.tambah_pasien_selesai(p3)
 
-laporan.insertion_sort_waktu()
-print("\nsetelah insertion sort (waktu tunggu terlama dulu):")
-laporan.tampil()
+    print("=== Laporan SEBELUM Diurutkan ===")
+    laporan.tampilkan_laporan()
 
-laporan.selection_sort_antrian()
-print("\nsetelah selection sort (no antrian urut):")
-laporan.tampil()
+    # Menjalankan proses sorting
+    laporan.insertion_sort()
+
+    print("\n=== Laporan SETELAH Diurutkan ===")
+    laporan.tampilkan_laporan()
