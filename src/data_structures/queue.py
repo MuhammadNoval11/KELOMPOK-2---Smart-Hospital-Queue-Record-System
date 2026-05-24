@@ -1,5 +1,4 @@
 from src.data_structures.linked_list import Node
-
 class Queue:
     def __init__(self):
         self.items = []
@@ -13,7 +12,6 @@ class Queue:
         return "Queue kosong"
     
 from .linked_list import LLNode, Pasien
-
 class PriorityQueue:
     """Priority Queue berbasis Singly Linked List, terurut prioritas ASC."""
     def __init__(self, nama_poli: str):
