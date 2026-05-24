@@ -1,12 +1,4 @@
 from src.data_structures.linked_list import LLNode, Pasien
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> feat/Belva-EksperimenValidasi
->>>>>>> dev
 class Stack:
     """Stack berbasis Singly Linked List untuk log tindakan dokter."""
     def __init__(self, nama_dokter: str):
