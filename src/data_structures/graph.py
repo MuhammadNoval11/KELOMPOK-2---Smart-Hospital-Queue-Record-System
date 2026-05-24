@@ -1,3 +1,4 @@
+
 class GraphRujukan:
     def __init__(self):
         # Menyimpan daftar unit dan tetangga rujukan yang terhubung
