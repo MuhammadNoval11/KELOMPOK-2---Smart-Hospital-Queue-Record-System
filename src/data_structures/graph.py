@@ -19,4 +19,3 @@ class GraphRujukan:
         if asal in self.adj_list:
             return self.adj_list[asal]
         return []
-    
