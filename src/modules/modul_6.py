@@ -155,5 +155,4 @@ def jalankan_eksperimen():
     print("Catatan: Salin tabel angka di atas untuk dimasukkan ke dalam laporan akhir.")
 
 if __name__ == "__main__":
-    jalankan_eksperimen()
-    
+    jalankan_eksperimen()    
