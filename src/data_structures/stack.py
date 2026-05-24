@@ -1,5 +1,4 @@
 from .linked_list import LLNode
-
 class Stack:
     """Stack berbasis Singly Linked List untuk log tindakan dokter."""
     def __init__(self, nama_dokter: str):
