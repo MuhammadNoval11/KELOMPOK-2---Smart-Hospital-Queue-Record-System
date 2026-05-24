@@ -7,7 +7,6 @@ class Node:
 
 from dataclasses import dataclass, field
 from typing import List, Optional
-
 # Struktur Data Rekam Medis sesuai starter code
 @dataclass
 class RekorMedis:
