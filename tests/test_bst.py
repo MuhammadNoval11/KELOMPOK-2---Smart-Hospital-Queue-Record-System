@@ -1,4 +1,3 @@
-
 from src.data_structures.linked_list import Node
 class Node:
     def __init__(self, data):
