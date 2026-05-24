@@ -1,5 +1,4 @@
 from src.data_structures.linked_list import Node
-
 class Queue:
     def __init__(self):
         self.items = []
@@ -19,7 +18,6 @@ class PriorityQueue:
         self.poli = nama_poli
         self.head = None
         self.size = 0
-
 
     def is_empty(self):
         return self.head is None
