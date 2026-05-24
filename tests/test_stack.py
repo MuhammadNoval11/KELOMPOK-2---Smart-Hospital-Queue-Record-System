@@ -35,4 +35,3 @@ class Stack:
         while curr:
             print(f"  - {curr.data}")
             curr = curr.next
-            
