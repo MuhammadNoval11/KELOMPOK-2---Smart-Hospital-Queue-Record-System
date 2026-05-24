@@ -20,7 +20,6 @@ class PriorityQueue:
         self.head = None
         self.size = 0
 
-
     def is_empty(self):
         return self.head is None
 
