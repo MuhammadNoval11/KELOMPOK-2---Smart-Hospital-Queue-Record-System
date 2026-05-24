@@ -97,3 +97,4 @@ if __name__ == "__main__":
     semua_data = bst.inorder()
     for data in semua_data:
         print(f"  RM {data.no_rm} - {data.nama}")
+
