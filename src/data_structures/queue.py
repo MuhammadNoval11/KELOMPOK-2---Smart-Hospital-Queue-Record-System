@@ -1,3 +1,17 @@
+from src.data_structures.linked_list import Node
+
+class Queue:
+    def __init__(self):
+        self.items = []
+
+    def enqueue(self, data):
+        self.items.append(data)
+
+    def dequeue(self):
+        if not self.is_empty():
+            return self.items.pop(0)
+        return "Queue kosong"
+    
 from .linked_list import LLNode, Pasien
 
 class PriorityQueue:
