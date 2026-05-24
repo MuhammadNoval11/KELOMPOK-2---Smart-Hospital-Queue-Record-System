@@ -1,14 +1,12 @@
-<<<<<<< HEAD
 from src.data_structures.linked_list import Node
 class Node:
     def __init__(self, data):
         self.data = data
         self.kiri = None
         self.kanan = None
-=======
+
 from dataclasses import dataclass, field
 from typing import List, Optional
->>>>>>> dev
 
 # Struktur Data Rekam Medis sesuai starter code
 @dataclass
