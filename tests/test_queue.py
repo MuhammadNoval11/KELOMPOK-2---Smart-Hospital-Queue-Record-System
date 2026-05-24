@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 from src.data_structures.linked_list import LLNode, Pasien
 class PriorityQueue:
     """Priority Queue berbasis Singly Linked List, terurut prioritas ASC."""
@@ -11,13 +9,7 @@ class PriorityQueue:
     def is_empty(self):
         return self.head is None
 
-
-=======
->>>>>>> feat/Belva-CLI
-=======
->>>>>>> feat/Belva-EksperimenValidasi
 from src.data_structures.linked_list import Node
-
 class Queue:
     def __init__(self):
         self.items = []
@@ -38,18 +30,9 @@ class PriorityQueue:
         self.head = None
         self.size = 0
 
-
     def is_empty(self):
         return self.head is None
-<<<<<<< HEAD
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> feat/Belva-CLI
-=======
-
->>>>>>> feat/Belva-EksperimenValidasi
     def enqueue(self, pasien: Pasien):
         """Big-O: O(n) worst-case"""
         baru = LLNode(pasien)
