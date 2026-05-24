@@ -56,4 +56,3 @@ class BSTRekamMedis:
             return self._search_rekursif(node.left, no_rm)
         else:
             return self._search_rekursif(node.right, no_rm)
-        
