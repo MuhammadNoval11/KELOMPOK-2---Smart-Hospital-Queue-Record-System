@@ -1,14 +1,3 @@
-from src.data_structures.linked_list import LLNode, Pasien
-class PriorityQueue:
-    """Priority Queue berbasis Singly Linked List, terurut prioritas ASC."""
-    def __init__(self, nama_poli: str):
-        self.poli = nama_poli
-        self.head = None
-        self.size = 0
-
-    def is_empty(self):
-        return self.head is None
-
 from src.data_structures.linked_list import Node
 class Queue:
     def __init__(self):
