@@ -34,6 +34,4 @@ class Stack:
         curr = self.top
         while curr:
             print(f"  - {curr.data}")
-            curr = curr.next
-
-            
+            curr = curr.next 
